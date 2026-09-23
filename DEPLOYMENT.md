@@ -30,10 +30,7 @@ sudo apt install -y nodejs
 sudo npm install -g pm2
 ```
 
-### 2.3 Install MongoDB
-You can run MongoDB locally via system packages or Docker:
-
-#### Option A: Native MongoDB (Recommended for VPS)
+### 2.3 Install MongoDB (Native VPS Service)
 ```bash
 curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
   sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
@@ -45,11 +42,6 @@ sudo apt update
 sudo apt install -y mongodb-org
 sudo systemctl enable mongod
 sudo systemctl start mongod
-```
-
-#### Option B: Docker Compose
-```bash
-docker compose up -d
 ```
 
 ---

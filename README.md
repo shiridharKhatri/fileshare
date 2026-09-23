@@ -41,27 +41,21 @@ A production-ready temporary file-sharing web application inspired by the simpli
 
 ### 1. Prerequisites
 - Node.js 20+
-- MongoDB instance (or Docker)
+- MongoDB 6.0+ (local service or remote connection)
 
 ### 2. Install Dependencies
 ```bash
 npm install
 ```
 
-### 3. Start Local MongoDB
-Using Docker Compose:
-```bash
-docker compose up -d
-```
-Or use your own local/cloud MongoDB connection string.
-
-### 4. Configure Environment
+### 3. Configure Environment
 Copy the example environment configuration:
 ```bash
 cp .env.example .env.local
 ```
+Set your `MONGODB_URI` in `.env.local` to point to your MongoDB instance.
 
-### 5. Start the Development Server
+### 4. Start the Development Server
 ```bash
 npm run dev
 ```
