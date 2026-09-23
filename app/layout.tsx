@@ -28,6 +28,13 @@ export const metadata: Metadata = {
       "Let your files take a safe flight. Share files and rich messages with one URL and a 4-digit code.",
     type: "website",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/icon.png", type: "image/png", sizes: "512x512" },
+    ],
+    apple: "/apple-icon.png",
+  },
 };
 
 export default function RootLayout({
