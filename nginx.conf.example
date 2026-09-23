@@ -1,0 +1,92 @@
+# Nginx Configuration Example for Temporary File Sharing Room
+# Place in /etc/nginx/sites-available/filesharing and symlink to /etc/nginx/sites-enabled/
+
+upstream filesharing_backend {
+    server 127.0.0.1:3000;
+    keepalive 32;
+}
+
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name share.example.com; # Replace with your domain
+
+    return 301 https://$host$request_uri;
+}
+
+# HTTPS Server
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name share.example.com; # Replace with your domain
+
+    # SSL Certificates (managed via Certbot / Let's Encrypt)
+    ssl_certificate /etc/letsencrypt/live/share.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/share.example.com/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    # Maximum upload size - adjust according to MAX_FILE_SIZE_MB (e.g. 5GB)
+    client_max_body_size 5000M;
+
+    # Timeouts for large uploads and downloads
+    client_body_timeout 300s;
+    client_header_timeout 60s;
+    proxy_read_timeout 600s;
+    proxy_send_timeout 600s;
+
+    # Static assets cache
+    location /_next/static/ {
+        proxy_pass http://filesharing_backend;
+        proxy_set_header Host $host;
+        expires 365d;
+        access_log off;
+    }
+
+    # Socket.io WebSocket support
+    location /socket.io/ {
+        proxy_pass http://filesharing_backend;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # Streaming file downloads - disable buffering for responsive streams
+    location ~* ^/api/rooms/[^/]+/files/[^/]+/download$ {
+        proxy_pass http://filesharing_backend;
+        proxy_http_version 1.1;
+        proxy_buffering off;
+        proxy_request_buffering off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # File uploads - stream directly without buffering whole body in nginx
+    location ~* ^/api/rooms/[^/]+/files$ {
+        proxy_pass http://filesharing_backend;
+        proxy_http_version 1.1;
+        proxy_request_buffering off; # Streams upload straight to Node.js / Multer
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # All other traffic
+    location / {
+        proxy_pass http://filesharing_backend;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}

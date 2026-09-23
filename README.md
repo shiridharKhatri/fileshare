@@ -1,36 +1,94 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Temporary Shared File & Message Room
+
+A production-ready temporary file-sharing web application inspired by the simplicity of WeTransfer, built for exchanging files and rich-text messages through ephemeral rooms.
+
+**Core Concept:**
+> **One URL → 4-digit code → shared room → upload/download files + rich-text messages → automatic deletion.**
+
+---
+
+## Features
+
+- **Ephemeral Rooms**: Create rooms identified by URL-safe slugs (e.g., `AB-12-CD`) with an expiration period (10h, 18h, or 24h).
+- **4-Digit Passcode Protection**: Bcrypt-hashed room access codes with sliding-window brute-force rate limiting (5 attempts per 15 min).
+- **Direct VPS File Storage**: Zero cloud storage (no S3, R2, or third-party buckets). All files stream directly to and from the server's filesystem using **Multer**.
+- **Real-Time Synchronization**: Live file and message updates across all room participants via **Socket.io** WebSocket events.
+- **Rich-Text Messaging**: Tiptap editor with headings, bold, italic, underline, lists, and links, backed by strict server-side DOMPurify sanitization.
+- **Automated Lifecycle & Cleanup**: Background scheduler cleans up expired rooms, unlinks files from disk, and purges database records automatically.
+- **Security Hardening**:
+  - Sandboxed filesystem operations with path traversal prevention.
+  - IDOR protection verifying room ownership on all file/message endpoints.
+  - Streaming file downloads with sanitized `Content-Disposition` headers.
+  - Strict Content Security Policy, nosniff, and anti-clickjacking headers.
+  - `robots.txt` disallowing search engine indexing of room URLs.
+
+---
+
+## Technology Stack
+
+- **Framework**: Next.js 16 (App Router, TypeScript)
+- **Styling**: Tailwind CSS
+- **Database**: MongoDB with Mongoose
+- **File Uploads**: Multer disk storage (VPS filesystem)
+- **Real-time**: Socket.io (custom Node.js server)
+- **Editor**: Tiptap 3 (`@tiptap/react`)
+- **Sanitization**: DOMPurify & `isomorphic-dompurify`
+- **Security & Validation**: Zod, Jose (JWT), Bcrypt
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Prerequisites
+- Node.js 20+
+- MongoDB instance (or Docker)
 
+### 2. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Start Local MongoDB
+Using Docker Compose:
+```bash
+docker compose up -d
+```
+Or use your own local/cloud MongoDB connection string.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Configure Environment
+Copy the example environment configuration:
+```bash
+cp .env.example .env.local
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 5. Start the Development Server
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Testing & Quality Assurance
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Run unit & security tests (27 tests)
+npm test
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# TypeScript type check
+npm run type-check
 
-## Deploy on Vercel
+# ESLint audit
+npm run lint
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# Production build
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Deployment
+
+This application uses a custom Node.js server with Socket.io and local filesystem storage, designed specifically for a **Linux VPS** (Ubuntu/Debian) managed via **PM2** and **Nginx**.
+
+For complete step-by-step VPS deployment, SSL setup, and system configuration instructions, see **[DEPLOYMENT.md](DEPLOYMENT.md)**.
