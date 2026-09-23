@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npx tsx server.ts",
+    "dev": "NODE_ENV=development npx tsx server.ts",
     "build": "next build && npx tsc --project tsconfig.server.json",
     "start": "NODE_ENV=production node server.js",
     "lint": "eslint",
