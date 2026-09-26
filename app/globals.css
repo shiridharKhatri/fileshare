@@ -164,17 +164,18 @@ html, body {
   animation: gentle-float-alt 8.5s ease-in-out infinite;
 }
 
-/* Tiptap editor styles */
+/* Tiptap editor styles — Large blank data box */
 .tiptap-editor {
   outline: none !important;
-  min-height: 200px;
-  max-height: 480px;
+  min-height: 320px;
+  max-height: 60vh;
   overflow-y: auto;
-  padding: 1.25rem 1.5rem;
-  font-size: 0.95rem;
-  line-height: 1.65;
+  padding: 1.5rem 1.75rem;
+  font-size: 1rem;
+  line-height: 1.7;
   color: #1e293b;
   cursor: text;
+  background-color: #ffffff;
 }
 
 .tiptap-editor p.is-editor-empty:first-child::before {
@@ -185,75 +186,107 @@ html, body {
   pointer-events: none;
 }
 
-.tiptap-editor h2 {
+.tiptap-editor h1,
+.message-content h1 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #0f172a;
+  line-height: 1.3;
+}
+
+.tiptap-editor h2,
+.message-content h2 {
   font-size: 1.25rem;
   font-weight: 600;
   margin-top: 1rem;
   margin-bottom: 0.5rem;
   color: #1e293b;
+  line-height: 1.35;
 }
 
-.tiptap-editor h3 {
+.tiptap-editor h3,
+.message-content h3 {
   font-size: 1.1rem;
   font-weight: 600;
   margin-top: 0.75rem;
   margin-bottom: 0.25rem;
   color: #1e293b;
+  line-height: 1.4;
 }
 
-.tiptap-editor ul {
-  list-style-type: disc;
-  padding-left: 1.25rem;
-  margin: 0.5rem 0;
-}
-
-.tiptap-editor ol {
-  list-style-type: decimal;
-  padding-left: 1.25rem;
-  margin: 0.5rem 0;
-}
-
-.tiptap-editor a {
-  color: #0284c7;
-  text-decoration: underline;
-}
-
-.tiptap-editor u {
-  text-decoration: underline;
-}
-
-/* Message content display */
-.message-content h2 {
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-top: 0.5rem;
-  margin-bottom: 0.25rem;
-}
-
-.message-content h3 {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin-top: 0.375rem;
-  margin-bottom: 0.25rem;
-}
-
+.tiptap-editor ul,
 .message-content ul {
   list-style-type: disc;
-  padding-left: 1.25rem;
-  margin: 0.25rem 0;
+  padding-left: 1.5rem;
+  margin: 0.6rem 0;
 }
 
+.tiptap-editor ol,
 .message-content ol {
   list-style-type: decimal;
-  padding-left: 1.25rem;
-  margin: 0.25rem 0;
+  padding-left: 1.5rem;
+  margin: 0.6rem 0;
 }
 
+.tiptap-editor li,
+.message-content li {
+  margin-bottom: 0.25rem;
+}
+
+.tiptap-editor a,
 .message-content a {
   color: #0284c7;
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
+.tiptap-editor u,
 .message-content u {
   text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.tiptap-editor s,
+.message-content s {
+  text-decoration: line-through;
+}
+
+.tiptap-editor blockquote,
+.message-content blockquote {
+  border-left: 3px solid #cbd5e1;
+  padding-left: 1rem;
+  margin: 0.75rem 0;
+  color: #475569;
+  font-style: italic;
+}
+
+.tiptap-editor pre,
+.message-content pre {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.tiptap-editor code,
+.message-content code {
+  background: #f1f5f9;
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.375rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.875em;
+  color: #0f172a;
+}
+
+.tiptap-editor hr,
+.message-content hr {
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+  margin: 1.25rem 0;
 }

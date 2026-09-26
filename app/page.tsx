@@ -13,7 +13,6 @@ export default function Home() {
   const [showJoin, setShowJoin] = useState(false);
   const [showCreate, setShowCreate] = useState(false);
   const [joinInput, setJoinInput] = useState("");
-  const [customSlug, setCustomSlug] = useState("");
   const [customPasscode, setCustomPasscode] = useState("");
   const [customExpiration, setCustomExpiration] = useState(18);
   const [error, setError] = useState("");
@@ -39,16 +38,11 @@ export default function Home() {
 
     try {
       const payload: {
-        slug?: string;
         passcode?: string;
         expirationHours?: number;
       } = {
         expirationHours: customExpiration,
       };
-
-      if (customSlug.trim()) {
-        payload.slug = customSlug.trim();
-      }
 
       if (code) {
         payload.passcode = code;
@@ -110,7 +104,7 @@ export default function Home() {
 
           {/* Clean Minimal Subtitle */}
           <p className="text-xs sm:text-sm text-slate-500 max-w-sm mx-auto mb-8 font-sans font-normal leading-relaxed px-1">
-            Temporary shared rooms for files and rich notes. Protected with a 4-digit code and auto-deleted in hours.
+            Private, ephemeral shared messages. Type or paste rich text, protect with a 4-digit code, and auto-delete when expired.
           </p>
 
           {/* Error notice if any */}
@@ -210,21 +204,6 @@ export default function Home() {
                 </select>
               </div>
 
-              {/* Optional Room Slug */}
-              <div className="space-y-1">
-                <label htmlFor="custom-slug" className="block text-xs font-semibold text-slate-700">
-                  Custom Name <span className="font-normal text-slate-400">(optional)</span>
-                </label>
-                <input
-                  id="custom-slug"
-                  type="text"
-                  value={customSlug}
-                  onChange={(e) => setCustomSlug(e.target.value)}
-                  placeholder="Random slug if empty (e.g. 5Y-TR-8V)"
-                  maxLength={50}
-                  className="w-full px-3.5 py-2 text-xs rounded-xl border border-white/80 bg-white/95 focus:outline-none focus:ring-2 focus:ring-amber-400/50 font-mono shadow-inner text-slate-700"
-                />
-              </div>
 
               {/* Actions */}
               <div className="flex gap-2 pt-2">
@@ -254,19 +233,19 @@ export default function Home() {
             <form onSubmit={handleJoinRoom} className="max-w-sm mx-auto space-y-3 pt-1 text-left">
               <div className="text-center pb-1">
                 <h2 className="text-lg font-serif italic text-slate-800">Join a Shared Room</h2>
-                <p className="text-xs text-slate-400">Enter the room link or slug</p>
+                <p className="text-xs text-slate-400">Enter the room link or code</p>
               </div>
 
               <div className="space-y-1 text-left">
                 <label htmlFor="input-join-slug" className="block text-xs font-semibold text-slate-700">
-                  Room Slug or URL
+                  Room Link or Code
                 </label>
                 <input
                   id="input-join-slug"
                   type="text"
                   value={joinInput}
                   onChange={(e) => setJoinInput(e.target.value)}
-                  placeholder="e.g. 5Y-TR-8V"
+                  placeholder="e.g. 5Y-TR-8V or full link"
                   autoFocus
                   required
                   className="w-full px-3.5 py-2.5 text-sm rounded-xl border border-white/80 bg-white/95 focus:outline-none focus:ring-2 focus:ring-amber-400/50 font-mono tracking-wider text-center shadow-inner font-semibold"

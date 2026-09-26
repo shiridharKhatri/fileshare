@@ -106,11 +106,12 @@ export default function AccessCodeForm({ slug, onAuthenticated }: Props) {
         <h1 className="text-2xl sm:text-3xl font-serif italic text-slate-800 tracking-tight">
           Unlock Room
         </h1>
-        <div className="inline-block px-3 py-1 rounded-full bg-white/70 border border-white text-xs font-mono font-semibold text-slate-700 shadow-sm">
-          {slug}
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/80 border border-white text-xs font-semibold text-slate-700 shadow-sm">
+          <span className="text-[10px] text-slate-400 font-sans uppercase tracking-wider">Room</span>
+          <span className="font-mono tracking-wider">{slug}</span>
         </div>
         <p className="text-xs text-slate-500 font-sans px-2">
-          Enter the 4-digit code provided by the room creator
+          Enter the 4-digit code provided to unlock and view the shared message
         </p>
       </div>
 
